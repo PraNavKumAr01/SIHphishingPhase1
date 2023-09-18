@@ -23,8 +23,10 @@ async def check_url(url: str):
         exclude_keys = ['message', 'success', 'status_code', 'language_code', 'request_id']
 
         output_data = {key: data[key] for key in data if key not in exclude_keys}
+        
+        output_json = json.dumps(output_data, indent=4)
 
-        return output_data
+        return output_json
 
     else:
         # API call failed
