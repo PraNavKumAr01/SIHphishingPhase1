@@ -1,12 +1,31 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 from urllib.parse import quote
 import requests
 import json
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# ADD THE ACCESS ORIGINS
+origins = ["*"]
+
+# CONFIGURING THE ORIGINS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class URLInput(BaseModel):
+    url: str
+
 @app.get("/check-url/")
-async def check_url(url: str):
+async def check_url(url_input: URLInput):
+    url = url_input.url
+    
     # URL-encode the input URL
     encoded_url = quote(url, safe="")
 
